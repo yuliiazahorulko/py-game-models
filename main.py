@@ -12,39 +12,39 @@ def main() -> None:
     for nickname, player_data in data.items():
 
         race_data = player_data.get("race")
-        race1 = None
-        guild1 = None
+        race_obj = None
 
         if race_data:
-            race1, _ = Race.objects.get_or_create(
+            race_obj, _ = Race.objects.get_or_create(
                 name=race_data["name"],
                 description=race_data["description"]
             )
 
-            skills = race_data.get("skill")
-            if isinstance(skills, list):
-                for skill in skills:
-                    Skill.objects.get_or_create(
-                        name=skill["name"],
-                        bonus=skill["bonus"],
-                        race=race1
-                    )
-
-            guild_data = race_data.get("guild")
-            if guild_data:
-                guild1, _ = Guild.objects.get_or_create(
-                    name=guild_data["name"],
-                    description=guild_data["description"]
+            skills = race_data.get("skills", [])
+            for skill in skills:
+                Skill.objects.get_or_create(
+                    name=skill["name"],
+                    bonus=skill["bonus"],
+                    race=race_obj
                 )
+
+        guild_data = player_data.get("guild")
+        guild_obj = None
+
+        if guild_data:
+            guild_obj, _ = Guild.objects.get_or_create(
+                name=guild_data["name"],
+                description=guild_data["description"]
+            )
 
         Player.objects.get_or_create(
             nickname=nickname,
             email=player_data["email"],
             bio=player_data["bio"],
-            race=race1,
-            guild=guild1
+            race=race_obj,
+            guild=guild_obj
         )
 
 
-if __name__ == "__main__":
+if "__name__" == "__main__":
     main()
