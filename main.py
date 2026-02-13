@@ -25,9 +25,21 @@ def main() -> None:
                     if isinstance(skills, list):
                         for skill in skills:
                             Skill.objects.get_or_create(
-                                name=(skill["name"] if skill["name"] else None),
-                                bonus=(skill["bonus"] if skill["bonus"] else None),
-                                race__name=(info["name"] if info["name"] else None)
+                                name=(
+                                    skill["name"]
+                                    if skill["name"]
+                                    else None
+                                ),
+                                bonus=(
+                                    skill["bonus"]
+                                    if skill["bonus"]
+                                    else None
+                                ),
+                                race__name=(
+                                    info["name"]
+                                    if info["name"]
+                                    else None
+                                )
                             )
                 guild = race.get("guild")
                 if guild:
